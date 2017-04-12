@@ -24,6 +24,7 @@ intltool \
 libssh2-1-dev \
 libtool \
 libtool-bin \
+lsb-base \
 monodoc-base \
 mono-mcs \
 mono-addins-utils \
@@ -34,22 +35,23 @@ referenceassemblies-pcl \
 software-properties-common \
 sudo \
 systemd \
+tzdata \
 wget \
 xterm \
 zlib1g-dev \
 && apt-get autoclean && rm -rf /var/lib/apt/lists/*
  
-RUN mkdir /opt/source
-WORKDIR /opt/source
-
-RUN git clone https://github.com/mono/monodevelop.git --branch monodevelop-6.3.0.863 --depth 1 6.3.0.863 && \
+RUN mkdir /opt/source && \
+cd /opt/source && \
+git clone https://github.com/mono/monodevelop.git --branch monodevelop-6.3.0.863 --depth 1 6.3.0.863 && \
 cd /opt/source/6.3.0.863 && \
-git submodule update --init --recursive
-WORKDIR /opt/source/6.3.0.863
-RUN ./configure --profile=stable --enable-release && \
+git submodule update --init --recursive &&\
+cd /opt/source/6.3.0.863 && \
+./configure --profile=stable --enable-release && \
 make && \
-make install
-RUN rm -rf /opt/source
+make install && \
+rm -rf /opt/*
+
 WORKDIR /home
 
 CMD [ "/usr/local/bin/monodevelop" ]
